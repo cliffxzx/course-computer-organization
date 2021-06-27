@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  co_project2:
+    container_name: co_project2
+    build: .
+    tty: true
+    volumes:
+      - "./source:/root/source"
+      - "./result:/root/workdir"
+    command: bash -c '/root/source/entrypoint.sh'
