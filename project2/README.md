@@ -29,13 +29,15 @@
 
 ## ☑ [Stage 3. Config last level cache to 2-way and full-way associative cache and test performance (15%)](https://github.com/cliffxzx/course-computer-organization/tree/v3.0/project2)
 
+根據 gem5 的說明文件設 1 就是 fully-associative，但是其實可以根據 Block Size 設，也就是 16 \* 1024。
+
 #### Reference
 
 1. [Cache 是怎麼組織和工作的？](https://zhuanlan.zhihu.com/p/31859105)
 1. [Homework #1](http://www.utdallas.edu/~gxm112130/EE6304FA17/project1.pdf)
 1. [CacheMemory and Cache Replacement Polices](http://www.m5sim.org/Coherence-Protocol-Independent_Memory_Components#CacheMemory_and_Cache_Replacement_Polices)
 
-## [Stage 4. Modify last level cache policy based on RRIP (15%)](https://github.com/cliffxzx/course-computer-organization/tree/v4.0/project2)
+## ☑ [Stage 4. Modify last level cache policy based on RRIP (15%)](https://github.com/cliffxzx/course-computer-organization/tree/v4.0/project2)
 
 ## [Stage 5. Test the performance of write back and write through policy based on 4-way associative cache with isscc_pcm(15%) ](https://github.com/cliffxzx/course-computer-organization/tree/v5.0/project2)
 
