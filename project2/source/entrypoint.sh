@@ -1,13 +1,15 @@
 # /bin/sh
 
-# clear previous build
 WORK_DIR="/root/workdir"
-if [ -d ${WORK_DIR} ]; then
-  rm -rf ${WORK_DIR}/*
-  echo "INFO | Old file exists."
-fi
+
+# clear previous build
+# if [ -d ${WORK_DIR} ]; then
+#   rm -rf ${WORK_DIR}/*
+#   echo "INFO | Old file exists."
+# fi
+
 mkdir -p ${WORK_DIR}
-cp -R /root/source/* ${WORK_DIR}
+cp -Rf /root/source/* ${WORK_DIR}
 
 # compile gem5
 echo "INFO | Compiling gem5..."
@@ -29,7 +31,36 @@ scons EXTRAS=../nvmain build/X86/gem5.opt -j 8
 
 # test
 echo "INFO | Testing..."
-./build/X86/gem5.opt configs/example/se.py -c tests/test-progs/hello/bin/x86/linux/hello --cpu-type=TimingSimpleCPU --caches --l2cache --mem-type=NVMainMemory --nvmain-config=../nvmain/Config/PCM_ISSCC_2012_4GB.config
+mkdir -p ${WORK_DIR}/gem5/m5out
+gcc --static ${WORK_DIR}/benchmark/multiply.c -o ${WORK_DIR}/benchmark/multiply
+${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
+    -c ${WORK_DIR}/benchmark/multiply \
+    --cpu-type=TimingSimpleCPU\
+    --caches \
+    --l2cache \
+    --l3cache \
+    --l1i_size=32kB \
+    --l1d_size=32kB \
+    --l2_size=128kB \
+    --l3_size=1MB \
+    --mem-type=NVMainMemory \
+    --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
+> ${WORK_DIR}/gem5/m5out/multiply_output.txt
+
+gcc --static ${WORK_DIR}/benchmark/quicksort.c -o ${WORK_DIR}/benchmark/quicksort
+${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
+    -c ${WORK_DIR}/benchmark/quicksort \
+    --cpu-type=TimingSimpleCPU\
+    --caches \
+    --l2cache \
+    --l3cache \
+    --l1i_size=32kB \
+    --l1d_size=32kB \
+    --l2_size=128kB \
+    --l3_size=1MB \
+    --mem-type=NVMainMemory \
+    --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
+> ${WORK_DIR}/gem5/m5out/quicksort_output.txt
 
 # prevent terminate
 echo "INFO | End of task..."
