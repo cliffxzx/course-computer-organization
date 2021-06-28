@@ -81,6 +81,8 @@ class L3Cache(Cache):
     tgts_per_mshr = 12
     write_buffers = 8
 
+    replacement_policy = Param.BaseReplacementPolicy(RRIPRP(), "Replacement policy")
+
 class IOCache(Cache):
     assoc = 8
     tag_latency = 50
