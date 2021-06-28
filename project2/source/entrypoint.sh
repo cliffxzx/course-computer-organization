@@ -31,36 +31,79 @@ scons EXTRAS=../nvmain build/X86/gem5.opt -j 8
 
 # test
 echo "INFO | Testing..."
-mkdir -p ${WORK_DIR}/gem5/m5out
+rm -rf ${WORK_DIR}/result
+
 gcc --static ${WORK_DIR}/benchmark/multiply.c -o ${WORK_DIR}/benchmark/multiply
+
+mkdir -p ${WORK_DIR}/result/multiply_2_way
 ${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
     -c ${WORK_DIR}/benchmark/multiply \
-    --cpu-type=TimingSimpleCPU\
+    --cpu-type=TimingSimpleCPU \
     --caches \
     --l2cache \
     --l3cache \
+    --l3_assoc=2 \
     --l1i_size=32kB \
     --l1d_size=32kB \
     --l2_size=128kB \
     --l3_size=1MB \
     --mem-type=NVMainMemory \
     --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
-> ${WORK_DIR}/gem5/m5out/multiply_output.txt
+> ${WORK_DIR}/result/multiply_2_way/output.txt
+mv ${WORK_DIR}/gem5/m5out/* ${WORK_DIR}/result/multiply_2_way
+
+mkdir -p ${WORK_DIR}/result/multiply_fully_way
+${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
+    -c ${WORK_DIR}/benchmark/multiply \
+    --cpu-type=TimingSimpleCPU \
+    --caches \
+    --l2cache \
+    --l3cache \
+    --l3_assoc=1 \
+    --l1i_size=32kB \
+    --l1d_size=32kB \
+    --l2_size=128kB \
+    --l3_size=1MB \
+    --mem-type=NVMainMemory \
+    --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
+> ${WORK_DIR}/result/multiply_fully_way/output.txt
+mv ${WORK_DIR}/gem5/m5out/* ${WORK_DIR}/result/multiply_fully_way
 
 gcc --static ${WORK_DIR}/benchmark/quicksort.c -o ${WORK_DIR}/benchmark/quicksort
+
+mkdir -p ${WORK_DIR}/result/quicksort_2_way
 ${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
     -c ${WORK_DIR}/benchmark/quicksort \
-    --cpu-type=TimingSimpleCPU\
+    --cpu-type=TimingSimpleCPU \
     --caches \
     --l2cache \
     --l3cache \
+    --l3_assoc=2 \
     --l1i_size=32kB \
     --l1d_size=32kB \
     --l2_size=128kB \
     --l3_size=1MB \
     --mem-type=NVMainMemory \
     --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
-> ${WORK_DIR}/gem5/m5out/quicksort_output.txt
+> ${WORK_DIR}/result/quicksort_2_way/output.txt
+mv ${WORK_DIR}/gem5/m5out/* ${WORK_DIR}/result/quicksort_2_way
+
+mkdir -p ${WORK_DIR}/result/quicksort_fully_way
+${WORK_DIR}/gem5/build/X86/gem5.opt ${WORK_DIR}/gem5/configs/example/se.py \
+    -c ${WORK_DIR}/benchmark/quicksort \
+    --cpu-type=TimingSimpleCPU \
+    --caches \
+    --l2cache \
+    --l3cache \
+    --l3_assoc=1 \
+    --l1i_size=32kB \
+    --l1d_size=32kB \
+    --l2_size=128kB \
+    --l3_size=1MB \
+    --mem-type=NVMainMemory \
+    --nvmain-config=${WORK_DIR}/nvmain/Config/PCM_ISSCC_2012_4GB.config \
+> ${WORK_DIR}/result/quicksort_fully_way/output.txt
+mv ${WORK_DIR}/gem5/m5out/* ${WORK_DIR}/result/quicksort_fully_way
 
 # prevent terminate
 echo "INFO | End of task..."

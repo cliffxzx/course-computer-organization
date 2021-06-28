@@ -6,5 +6,5 @@ services:
     tty: true
     volumes:
       - "./source:/root/source"
-      - "./result:/root/workdir"
+      - "./target:/root/workdir"
     command: bash -c '/root/source/entrypoint.sh'
