@@ -1347,7 +1347,7 @@ Cache::sendMSHRQueuePacket(MSHR* mshr)
         // copy from memory that might get used in place of the
         // dirty one.
         Packet snoop_pkt(tgt_pkt, true, false);
-        snoop_pkt.setExpressSnoop();
+        snoop_pkt.setWriteThrough();
         // We are sending this packet upwards, but if it hits we will
         // get a snoop response that we end up treating just like a
         // normal response, hence it needs the MSHR as its sender
